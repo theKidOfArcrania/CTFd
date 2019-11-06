@@ -4,9 +4,11 @@ from sqlalchemy.orm import validates, column_property
 from sqlalchemy.ext.hybrid import hybrid_property
 from CTFd.utils.crypto import hash_password
 from CTFd.utils.humanize.numbers import ordinalize
+from CTFd.utils.encoding import hexencode
 from CTFd.cache import cache
 import datetime
 import six
+import os
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -230,7 +232,7 @@ class Users(db.Model):
     password = db.Column(db.String(128))
     email = db.Column(db.String(128), unique=True)
     type = db.Column(db.String(80))
-    secret = db.Column(db.String(128))
+    secret = db.Column(db.String(128), default=hexencode(os.urandom(32)))
 
     # Supplementary attributes
     website = db.Column(db.String(128))
@@ -374,7 +376,7 @@ class Teams(db.Model):
     name = db.Column(db.String(128))
     email = db.Column(db.String(128), unique=True)
     password = db.Column(db.String(128))
-    secret = db.Column(db.String(128))
+    secret = db.Column(db.String(128), default=hexencode(os.urandom(32)))
 
     members = db.relationship("Users", backref="team", foreign_keys="Users.team_id")
 
