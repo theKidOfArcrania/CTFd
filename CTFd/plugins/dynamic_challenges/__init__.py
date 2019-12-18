@@ -124,6 +124,7 @@ class DynamicValueChallenge(BaseChallenge):
         # It is important that this calculation takes into account floats.
         # Hence this file uses from __future__ import division
         # *** Changed it to better decay formula
+        chal = challenge
         value = ((chal.initial - chal.minimum) / (1 + solve_count / chal.decay)) + chal.minimum
         value = math.ceil(value)
 
